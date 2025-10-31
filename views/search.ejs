@@ -143,7 +143,8 @@
           <tr>
             <td><%= p.id %></td>
             <td><%= p.name %></td>
-            <td><%= p.price %></td>
+            <td><%= Number(p.price).toFixed(3) %></td>
+
           </tr>
         <% }) %>
       </table>
