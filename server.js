@@ -53,6 +53,17 @@ app.get("/search", (req, res) => {
   });
 });
 
+// Hiển thị danh sách tất cả sản phẩm
+app.get("/products", (req, res) => {
+  const sql = "SELECT * FROM products ORDER BY id DESC";
+  connection.query(sql, (err, results) => {
+    if (err) {
+      return res.send("❌ Lỗi khi tải sản phẩm!");
+    }
+    res.render("products", { products: results });
+  });
+});
+
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, "0.0.0.0", () => {

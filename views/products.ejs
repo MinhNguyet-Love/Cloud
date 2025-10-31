@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Danh sách sản phẩm</title>
+</head>
+<body>
+  <h1>📦 Danh sách sản phẩm</h1>
+  <a href="/">⬅ Quay lại trang chủ</a>
+  <ul>
+    <% if (products.length === 0) { %>
+      <li>Chưa có sản phẩm nào</li>
+    <% } else { %>
+      <% products.forEach(p => { %>
+        <li><%= p.id %>. <%= p.name %> — <%= p.price %>₫</li>
+      <% }) %>
+    <% } %>
+  </ul>
+</body>
+</html>
