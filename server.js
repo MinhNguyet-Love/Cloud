@@ -64,6 +64,43 @@ app.get("/products", (req, res) => {
   });
 });
 
+// Xóa sản phẩm
+app.get("/delete/:id", (req, res) => {
+  const sql = "DELETE FROM products WHERE id = ?";
+  connection.query(sql, [req.params.id], (err) => {
+    if (err) {
+      res.send("❌ Lỗi khi xóa sản phẩm!");
+    } else {
+      res.redirect("/products");
+    }
+  });
+});
+
+// Trang sửa sản phẩm
+app.get("/edit/:id", (req, res) => {
+  const sql = "SELECT * FROM products WHERE id = ?";
+  connection.query(sql, [req.params.id], (err, results) => {
+    if (err || results.length === 0) {
+      res.send("❌ Không tìm thấy sản phẩm!");
+    } else {
+      res.render("edit", { product: results[0] });
+    }
+  });
+});
+
+// Cập nhật sản phẩm
+app.post("/edit/:id", (req, res) => {
+  const { name, price } = req.body;
+  const sql = "UPDATE products SET name=?, price=? WHERE id=?";
+  connection.query(sql, [name, price, req.params.id], (err) => {
+    if (err) {
+      res.send("❌ Lỗi khi cập nhật sản phẩm!");
+    } else {
+      res.redirect("/products");
+    }
+  });
+});
+
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, "0.0.0.0", () => {
