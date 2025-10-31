@@ -1,25 +1,41 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Chỉnh sửa sản phẩm</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>✏️ Sửa sản phẩm</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; background: #f0f7ff; }
+    form {
+      background: white;
+      padding: 30px;
+      margin-top: 50px;
+      border-radius: 12px;
+      display: inline-block;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      width: 250px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #2196f3;
+      color: white;
+      cursor: pointer;
+    }
+    a { text-decoration: none; color: #4caf50; display: block; margin-top: 15px; }
+  </style>
 </head>
-<body class="p-4">
-  <div class="container">
-    <h1>✏️ Sửa sản phẩm</h1>
-    <form action="/edit/<%= product.id %>" method="post" class="mt-3">
-      <div class="mb-3">
-        <label class="form-label">Tên sản phẩm</label>
-        <input type="text" name="name" value="<%= product.name %>" class="form-control" required />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Giá</label>
-        <input type="number" step="0.01" name="price" value="<%= product.price %>" class="form-control" required />
-      </div>
-      <button type="submit" class="btn btn-primary">💾 Lưu thay đổi</button>
-      <a href="/products" class="btn btn-secondary">⬅ Quay lại</a>
-    </form>
-  </div>
+<body>
+  <h1>✏️ Sửa sản phẩm</h1>
+  <form action="/edit/<%= product.id %>" method="POST">
+    <input type="text" name="name" value="<%= product.name %>" required />
+    <input type="number" step="0.01" name="price" value="<%= product.price %>" required />
+    <button type="submit">Cập nhật</button>
+  </form>
+  <a href="/products">⬅ Quay lại danh sách</a>
 </body>
 </html>

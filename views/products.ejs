@@ -2,41 +2,58 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Danh sách sản phẩm</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>📦 Danh sách sản phẩm</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f8f9fa; text-align: center; }
+    table {
+      margin: 30px auto;
+      border-collapse: collapse;
+      width: 80%;
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    th, td { padding: 10px; border-bottom: 1px solid #ddd; }
+    th { background: #4caf50; color: white; }
+    .btn {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+    }
+    .edit { background: #2196f3; }
+    .delete { background: #f44336; }
+    a { text-decoration: none; color: #4caf50; font-weight: bold; }
+  </style>
 </head>
-<body class="p-4">
-  <div class="container">
-    <h1 class="mb-3"><span>📦</span> Danh sách sản phẩm</h1>
-    <a href="/" class="btn btn-link">⬅ Quay lại trang chủ</a>
-
-    <table class="table table-bordered table-hover mt-3">
-      <thead class="table-dark">
-        <tr>
-          <th>ID</th>
-          <th>Tên sản phẩm</th>
-          <th>Giá</th>
-          <th>Hành động</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if (products.length === 0) { %>
-          <tr><td colspan="4" class="text-center">Chưa có sản phẩm nào</td></tr>
-        <% } else { %>
-          <% products.forEach((p, index) => { %>
-         <tr>
-              <td><%= index + 1 %></td>
-              <td><%= p.name %></td>
-              <td><%= Number(p.price).toFixed(3) %>₫</td>
-              <td>
-                <a href="/edit/<%= p.id %>" class="btn btn-warning btn-sm">✏️ Sửa</a>
-                <a href="/delete/<%= p.id %>" class="btn btn-danger btn-sm" onclick="return confirm('Xóa sản phẩm này?')">🗑️ Xóa</a>
-              </td>
-            </tr>
-          <% }) %>
-        <% } %>
-      </tbody>
-    </table>
-  </div>
+<body>
+  <h1>📋 Danh sách sản phẩm</h1>
+  <% if (products.length > 0) { %>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Tên sản phẩm</th>
+      <th>Giá (VNĐ)</th>
+      <th>Thao tác</th>
+    </tr>
+    <% products.forEach(p => { %>
+      <tr>
+        <td><%= p.id %></td>
+        <td><%= p.name %></td>
+        <td><%= p.price %></td>
+        <td>
+          <a class="btn edit" href="/edit/<%= p.id %>">✏️ Sửa</a>
+          <form action="/delete/<%= p.id %>" method="POST" style="display:inline"
+                onsubmit="return confirm('Xóa sản phẩm này?')">
+            <button class="btn delete">🗑️ Xóa</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+  <% } else { %>
+    <p>Chưa có sản phẩm nào!</p>
+  <% } %>
+  <a href="/">➕ Thêm sản phẩm</a>
 </body>
 </html>
