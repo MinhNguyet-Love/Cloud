@@ -54,6 +54,8 @@ app.get("/search", (req, res) => {
 });
 
 
-app.listen(process.env.PORT, () => {
-  console.log(`🚀 Server đang chạy tại http://localhost:${process.env.PORT}`);
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Server đang chạy tại http://0.0.0.0:${PORT}`);
 });
+
