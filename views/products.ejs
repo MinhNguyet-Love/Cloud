@@ -27,7 +27,7 @@
             <tr>
               <td><%= p.id %></td>
               <td><%= p.name %></td>
-              <td><%= p.price %>₫</td>
+              <td><%= Number(p.price).toFixed(3) %>₫</td>
               <td>
                 <a href="/edit/<%= p.id %>" class="btn btn-warning btn-sm">✏️ Sửa</a>
                 <a href="/delete/<%= p.id %>" class="btn btn-danger btn-sm" onclick="return confirm('Xóa sản phẩm này?')">🗑️ Xóa</a>
