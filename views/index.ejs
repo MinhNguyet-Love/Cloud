@@ -2,25 +2,30 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>🛍️ Thêm sản phẩm</title>
+  <title>➕ Thêm sản phẩm mới</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: #f2f8ff;
       text-align: center;
-      background: #f0f7ff;
-      padding-top: 50px;
+      padding: 40px;
+    }
+    h1 {
+      color: #111;
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 20px;
     }
     form {
       background: white;
-      padding: 30px;
-      border-radius: 12px;
       display: inline-block;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     }
     input, button {
-      display: block;
-      margin: 10px auto;
       padding: 10px;
+      margin: 10px 0;
       width: 250px;
       border-radius: 5px;
       border: 1px solid #ccc;
@@ -28,23 +33,46 @@
     button {
       background: #4caf50;
       color: white;
+      font-weight: bold;
       cursor: pointer;
+      border: none;
     }
-    a {
-      display: block;
+    button:hover {
+      background: #43a047;
+    }
+    .link {
       margin-top: 15px;
+      display: block;
+      color: #1976d2;
+      font-weight: bold;
       text-decoration: none;
-      color: #007bff;
+    }
+    .search-form {
+      margin-top: 40px;
+      background: #fff;
+      display: inline-block;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
     }
   </style>
 </head>
 <body>
   <h1>➕ Thêm sản phẩm mới</h1>
-  <form action="/add" method="POST">
+
+  <form method="POST" action="/add">
     <input type="text" name="name" placeholder="Tên sản phẩm" required />
-    <input type="number" step="0.01" name="price" placeholder="Giá (VNĐ)" required />
+    <input type="number" step="0.001" name="price" placeholder="Giá (VNĐ)" required />
     <button type="submit">Thêm</button>
   </form>
-  <a href="/products">📋 Xem danh sách sản phẩm</a>
+
+  <a href="/products" class="link">📋 Xem danh sách sản phẩm</a>
+
+  <div class="search-form">
+    <form action="/search" method="get">
+      <input type="text" name="keyword" placeholder="Nhập tên sản phẩm để tìm..." required />
+      <button type="submit">🔍 Tìm kiếm</button>
+    </form>
+  </div>
 </body>
 </html>
