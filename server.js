@@ -64,17 +64,22 @@ app.get("/products", (req, res) => {
   });
 });
 
-// Xóa sản phẩm
-app.get("/delete/:id", (req, res) => {
+// 🗑️ Xóa sản phẩm
+app.post("/delete/:id", (req, res) => {
+  const { id } = req.params;
   const sql = "DELETE FROM products WHERE id = ?";
-  connection.query(sql, [req.params.id], (err) => {
+
+  connection.query(sql, [id], (err) => {
     if (err) {
-      res.send("❌ Lỗi khi xóa sản phẩm!");
+      console.error("❌ Lỗi khi xóa sản phẩm:", err);
+      res.redirect("/?error=1");
     } else {
-      res.redirect("/products");
+      console.log(`🗑️ Đã xóa sản phẩm có ID ${id}`);
+      res.redirect("/?success=1");
     }
   });
 });
+
 
 // Trang sửa sản phẩm
 app.get("/edit/:id", (req, res) => {
