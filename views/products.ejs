@@ -23,9 +23,9 @@
         <% if (products.length === 0) { %>
           <tr><td colspan="4" class="text-center">Chưa có sản phẩm nào</td></tr>
         <% } else { %>
-          <% products.forEach(p => { %>
-            <tr>
-              <td><%= p.id %></td>
+          <% products.forEach((p, index) => { %>
+         <tr>
+              <td><%= index + 1 %></td>
               <td><%= p.name %></td>
               <td><%= Number(p.price).toFixed(3) %>₫</td>
               <td>
