@@ -50,22 +50,34 @@ app.get("/products", (req, res) => {
   });
 });
 
-
 // 🗑️ Xóa sản phẩm
 app.post("/delete/:id", (req, res) => {
   const { id } = req.params;
-  const sql = "DELETE FROM products WHERE id = ?";
+  const deleteSql = "DELETE FROM products WHERE id = ?";
 
-  connection.query(sql, [id], (err) => {
+  connection.query(deleteSql, [id], (err) => {
     if (err) {
       console.error("❌ Lỗi khi xóa sản phẩm:", err);
-      res.redirect("/products?error=1");
-    } else {
-      console.log(`🗑️ Đã xóa sản phẩm ID ${id}`);
-      res.redirect("/products?success=1");
+      return res.redirect("/products?error=1");
     }
+
+    console.log(`🗑️ Đã xóa sản phẩm ID ${id}`);
+
+    // ✅ Kiểm tra nếu bảng trống, reset AUTO_INCREMENT về 1
+    const checkSql = "SELECT COUNT(*) AS total FROM products";
+    connection.query(checkSql, (err, results) => {
+      if (!err && results[0].total === 0) {
+        const resetSql = "ALTER TABLE products AUTO_INCREMENT = 1";
+        connection.query(resetSql, (err) => {
+          if (err) console.error("⚠️ Không thể reset ID:", err);
+          else console.log("🔄 Đã reset ID về 1 vì bảng trống!");
+        });
+      }
+      res.redirect("/products?success=1");
+    });
   });
 });
+
 
 
 // ✏️ Trang sửa sản phẩm
