@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>🔍 Tìm kiếm sản phẩm</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(180deg, #f0f7ff, #ffffff);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 30px;
+      color: #222;
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h1::before {
+      content: "🔍";
+      font-size: 28px;
+    }
+
+    form {
+      margin: 25px auto;
+      width: 400px;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #4caf50;
+    }
+
+    button {
+      padding: 10px 16px;
+      border: none;
+      background-color: #4caf50;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #43a047;
+    }
+
+    table {
+      width: 70%;
+      margin: 30px auto;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #4caf50;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tr:hover {
+      background-color: #f8f8f8;
+    }
+
+    .alert {
+      width: 400px;
+      margin: 20px auto;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      animation: fadeIn 0.4s ease;
+      transition: opacity 0.5s ease;
+    }
+
+    .no-result {
+      background-color: #f44336;
+      color: white;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 15px;
+      text-decoration: none;
+      color: #4b0082;
+      font-weight: 600;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Kết quả tìm kiếm</h1>
+
+  <form method="GET" action="/search">
+    <input type="text" name="keyword" placeholder="Nhập tên sản phẩm..." required />
+    <button type="submit">Tìm kiếm</button>
+  </form>
+
+  <% if (searched) { %>
+    <% if (products.length === 0) { %>
+      <div id="alert" class="alert no-result">❌ Không tìm thấy sản phẩm nào</div>
+    <% } else { %>
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Tên sản phẩm</th>
+          <th>Giá (VNĐ)</th>
+        </tr>
+        <% products.forEach((p) => { %>
+          <tr>
+            <td><%= p.id %></td>
+            <td><%= p.name %></td>
+            <td><%= p.price %></td>
+          </tr>
+        <% }) %>
+      </table>
+    <% } %>
+  <% } %>
+
+  <a href="/">⬅️ Quay lại trang thêm sản phẩm</a>
+
+  <script>
+    // Ẩn thông báo “Không tìm thấy” sau 3 giây
+    const alertBox = document.getElementById("alert");
+    if (alertBox) {
+      setTimeout(() => {
+        alertBox.style.opacity = "0";
+        setTimeout(() => alertBox.remove(), 500);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
