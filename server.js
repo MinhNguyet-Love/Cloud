@@ -11,41 +11,52 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// Trang chủ
+
+// 🏠 Trang chủ: hiển thị toàn bộ sản phẩm + form thêm
 app.get("/", (req, res) => {
   const { success, error } = req.query;
-  res.render("index", { success, error });
-});
+  const sql = "SELECT * FROM products ORDER BY id ASC"; // lấy danh sách sản phẩm
 
-
-// Thêm sản phẩm
-app.post("/add", (req, res) => {
-  const { name, price } = req.body;
-  const sql = "INSERT INTO products (name, price) VALUES (?, ?)";
-  connection.query(sql, [name, price], (err) => {
+  connection.query(sql, (err, results) => {
     if (err) {
-      res.redirect("/?error=1");
+      console.error("❌ Lỗi khi tải danh sách sản phẩm:", err);
+      res.render("index", { success, error, products: [] });
     } else {
-      console.log("✅ Thêm sản phẩm thành công!");
-      res.redirect("/?success=1"); // chuyển hướng về trang chủ kèm thông báo
+      res.render("index", { success, error, products: results });
     }
   });
 });
 
 
-// Tìm kiếm sản phẩm
+// ➕ Thêm sản phẩm
+app.post("/add", (req, res) => {
+  const { name, price } = req.body;
+  const sql = "INSERT INTO products (name, price) VALUES (?, ?)";
+
+  connection.query(sql, [name, price], (err) => {
+    if (err) {
+      console.error("❌ Lỗi khi thêm sản phẩm:", err);
+      res.redirect("/?error=1");
+    } else {
+      console.log("✅ Thêm sản phẩm thành công!");
+      res.redirect("/?success=1");
+    }
+  });
+});
+
+
+// 🔍 Tìm kiếm sản phẩm
 app.get("/search", (req, res) => {
   const { keyword } = req.query;
 
-  // ✅ Nếu chưa nhập từ khóa (vừa mở trang tìm kiếm)
   if (!keyword) {
     return res.render("search", { products: [], searched: false });
   }
 
-  // ✅ Nếu có từ khóa, thực hiện truy vấn
   const sql = "SELECT * FROM products WHERE name LIKE ?";
   connection.query(sql, [`%${keyword}%`], (err, results) => {
     if (err) {
+      console.error("❌ Lỗi khi tìm kiếm sản phẩm:", err);
       res.send("❌ Lỗi khi tìm kiếm sản phẩm!");
     } else {
       res.render("search", { products: results, searched: true });
@@ -53,16 +64,6 @@ app.get("/search", (req, res) => {
   });
 });
 
-// Hiển thị danh sách tất cả sản phẩm
-app.get("/products", (req, res) => {
-  const sql = "SELECT * FROM products ORDER BY id DESC";
-  connection.query(sql, (err, results) => {
-    if (err) {
-      return res.send("❌ Lỗi khi tải sản phẩm!");
-    }
-    res.render("products", { products: results });
-  });
-});
 
 // 🗑️ Xóa sản phẩm
 app.post("/delete/:id", (req, res) => {
@@ -74,14 +75,14 @@ app.post("/delete/:id", (req, res) => {
       console.error("❌ Lỗi khi xóa sản phẩm:", err);
       res.redirect("/?error=1");
     } else {
-      console.log(`🗑️ Đã xóa sản phẩm có ID ${id}`);
+      console.log(`🗑️ Đã xóa sản phẩm ID ${id}`);
       res.redirect("/?success=1");
     }
   });
 });
 
 
-// Trang sửa sản phẩm
+// ✏️ Trang sửa sản phẩm
 app.get("/edit/:id", (req, res) => {
   const sql = "SELECT * FROM products WHERE id = ?";
   connection.query(sql, [req.params.id], (err, results) => {
@@ -93,22 +94,26 @@ app.get("/edit/:id", (req, res) => {
   });
 });
 
-// Cập nhật sản phẩm
+
+// ✅ Cập nhật sản phẩm
 app.post("/edit/:id", (req, res) => {
   const { name, price } = req.body;
   const sql = "UPDATE products SET name=?, price=? WHERE id=?";
+
   connection.query(sql, [name, price, req.params.id], (err) => {
     if (err) {
+      console.error("❌ Lỗi khi cập nhật sản phẩm:", err);
       res.send("❌ Lỗi khi cập nhật sản phẩm!");
     } else {
-      res.redirect("/products");
+      console.log(`✏️ Đã cập nhật sản phẩm ID ${req.params.id}`);
+      res.redirect("/");
     }
   });
 });
 
 
-const PORT = process.env.PORT || 8080;
+// 🚀 Khởi chạy server
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server đang chạy tại http://0.0.0.0:${PORT}`);
 });
-

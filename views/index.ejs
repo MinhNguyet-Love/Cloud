@@ -1,12 +1,183 @@
-// 🧾 Hiển thị tất cả sản phẩm ở trang chủ
-app.get("/", (req, res) => {
-  const { success, error } = req.query;
-  const sql = "SELECT * FROM products ORDER BY id ASC";
-  connection.query(sql, (err, results) => {
-    if (err) {
-      res.render("index", { success, error, products: [] });
-    } else {
-      res.render("index", { success, error, products: results });
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>🛍️ Quản lý sản phẩm</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(180deg, #f0f7ff, #ffffff);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      min-height: 100vh;
     }
-  });
-});
+
+    h1 {
+      font-size: 32px;
+      color: #222;
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h1::before { content: "🛒"; font-size: 30px; }
+
+    .alert {
+      padding: 12px 18px;
+      border-radius: 6px;
+      margin: 20px auto;
+      font-weight: 600;
+      font-size: 15px;
+      width: 400px;
+      text-align: center;
+      animation: fadeIn 0.4s ease;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    .success { background-color: #4caf50; color: white; }
+    .error { background-color: #f44336; color: white; }
+
+    form {
+      background: white;
+      padding: 25px 35px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 380px;
+      text-align: center;
+      margin: auto;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+
+    input:focus { border-color: #4caf50; }
+
+    button {
+      width: 100%;
+      background-color: #4caf50;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover { background-color: #43a047; }
+
+    a {
+      color: #4b0082;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 18px;
+      display: inline-block;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    table {
+      width: 70%;
+      margin: 30px auto;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+    }
+
+    th {
+      background-color: #4caf50;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    tr:hover { background-color: #f8f8f8; }
+
+    .btn-delete {
+      background: #ff5252;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-delete:hover { background: #e53935; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Quản lý sản phẩm</h1>
+
+  <% if (typeof success !== 'undefined' && success == 1) { %>
+    <div id="alert" class="alert success">✅ Thao tác thành công!</div>
+  <% } else if (typeof error !== 'undefined' && error == 1) { %>
+    <div id="alert" class="alert error">❌ Có lỗi xảy ra!</div>
+  <% } %>
+
+  <form method="POST" action="/add">
+    <input type="text" name="name" placeholder="Tên sản phẩm" required />
+    <input type="number" step="0.01" name="price" placeholder="Giá (VNĐ)" required />
+    <button type="submit">➕ Thêm sản phẩm</button>
+  </form>
+
+  <% if (typeof products !== 'undefined' && products.length > 0) { %>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Tên sản phẩm</th>
+      <th>Giá (VNĐ)</th>
+      <th>Thao tác</th>
+    </tr>
+    <% products.forEach((p) => { %>
+      <tr>
+        <td><%= p.id %></td>
+        <td><%= p.name %></td>
+        <td><%= p.price %></td>
+        <td>
+          <form action="/delete/<%= p.id %>" method="POST"
+                onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')">
+            <button class="btn-delete">🗑️ Xóa</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+  <% } %>
+
+  <a href="/search">🔍 Tìm kiếm sản phẩm</a>
+
+  <script>
+    const alertBox = document.getElementById("alert");
+    if (alertBox) {
+      setTimeout(() => {
+        alertBox.style.opacity = "0";
+        setTimeout(() => alertBox.remove(), 500);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
