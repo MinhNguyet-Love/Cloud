@@ -1,78 +1,173 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <title>➕ Thêm sản phẩm mới</title>
+  <meta charset="UTF-8">
+  <title>➕ Thêm sản phẩm</title>
+
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f2f8ff;
-      text-align: center;
-      padding: 40px;
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #eef1f4;
     }
-    h1 {
-      color: #111;
-      font-size: 32px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-    form {
-      background: white;
-      display: inline-block;
-      padding: 30px 40px;
-      border-radius: 12px;
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    }
-    input, button {
-      padding: 10px;
-      margin: 10px 0;
-      width: 250px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background: #4caf50;
+
+    /* NAVBAR */
+    .navbar {
+      width: 100%;
+      height: 60px;
+      background: linear-gradient(135deg, #28a745, #2d7c4b);
       color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      font-size: 22px;
+      font-weight: bold;
+      gap: 10px;
+    }
+
+    .navbar img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .navbar a {
+      margin-left: 20px;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .navbar a:hover {
+      opacity: 0.7;
+    }
+
+    /* CONTENT */
+    .content {
+      margin-top: 100px;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: 450px;
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      animation: fadeIn 0.4s ease;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #2a7f3c;
+      font-size: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    input {
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: #28a745;
+      box-shadow: 0 0 6px rgba(40,167,69,0.3);
+      outline: none;
+    }
+
+    button {
+      padding: 12px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      border: none;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
+
     button:hover {
-      background: #43a047;
+      background: #1e7a33;
+      box-shadow: 0 4px 12px rgba(40,167,69,0.3);
     }
-    .link {
-      margin-top: 15px;
+
+    .back-link {
       display: block;
-      color: #1976d2;
-      font-weight: bold;
+      margin-top: 20px;
+      text-align: center;
       text-decoration: none;
+      color: #2a7f3c;
+      font-size: 16px;
+      font-weight: bold;
+      transition: 0.2s;
     }
-    .search-form {
-      margin-top: 40px;
-      background: #fff;
-      display: inline-block;
-      padding: 20px 30px;
-      border-radius: 10px;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+
+    .back-link:hover {
+      color: #18682c;
+      text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
+
 <body>
-  <h1>➕ Thêm sản phẩm mới</h1>
 
-  <form method="POST" action="/add">
-    <input type="text" name="name" placeholder="Tên sản phẩm" required />
-    <input type="number" step="0.001" name="price" placeholder="Giá (VNĐ)" required />
-    <button type="submit">Thêm</button>
-  </form>
-
-  <a href="/products" class="link">📋 Xem danh sách sản phẩm</a>
-
-  <div class="search-form">
-    <form action="/search" method="get">
-      <input type="text" name="keyword" placeholder="Nhập tên sản phẩm để tìm..." required />
-      <button type="submit">🔍 Tìm kiếm</button>
-    </form>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" />
+      Admin Dashboard
+    </div>
   </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="card">
+      <h1>➕ Thêm sản phẩm</h1>
+
+      <form action="/add" method="POST">
+        <input type="text" name="name" placeholder="Tên sản phẩm" required>
+        <input type="number" name="price" placeholder="Giá" required>
+        <button type="submit">💾 Lưu sản phẩm</button>
+      </form>
+
+      <a class="back-link" href="/products">📦 Quay lại danh sách</a>
+    </div>
+  </div>
+
 </body>
 </html>
