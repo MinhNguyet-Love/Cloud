@@ -15,8 +15,7 @@
 
 // export default pool.promise();
 // db.js
-// db.js
-import mysql from "mysql2/promise";
+import mysql from "mysql2";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -31,15 +30,14 @@ const pool = mysql.createPool({
   queueLimit: 0,
 });
 
-// Kiểm tra kết nối
-(async () => {
-  try {
-    const conn = await pool.getConnection();
-    console.log("✅ MySQL pool connected!");
-    conn.release();
-  } catch (err) {
+// Test kết nối tự động
+pool.getConnection((err, conn) => {
+  if (err) {
     console.error("❌ Lỗi kết nối MySQL Pool:", err);
+  } else {
+    console.log("✅ Đã kết nối MySQL Pool thành công!");
+    conn.release();
   }
-})();
+});
 
 export default pool;
