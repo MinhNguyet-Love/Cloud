@@ -23,11 +23,17 @@ app.get("/debug", async (req, res) => {
 });
 
 
-// Trang chủ
 app.get("/", (req, res) => {
-  res.render("index", { success: req.query.success, error: req.query.error });
+  res.redirect("/products");
 });
 
+// Trang thêm sản phẩm (GET)
+app.get("/add", (req, res) => {
+  res.render("index", {
+    success: req.query.success,
+    error: req.query.error
+  });
+});
 
 // Thêm sản phẩm
 app.post("/add", async (req, res) => {
